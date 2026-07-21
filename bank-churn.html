@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bank Customer Churn — Case Study · Nurul Ilahi Husnah</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#EDF2ED;
+  --bg2:#E4EDE4;
+  --card:#D6E6D2;
+  --card2:#C8DABC;
+  --card-border:#B0C9AA;
+  --text:#1A251A;
+  --text-dim:#536B55;
+  --sage:#3D6E4A;
+  --sage-bg:rgba(61,110,74,0.07);
+  --sage-border:rgba(61,110,74,0.2);
+  --font-display:'DM Serif Display',serif;
+  --font-body:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.7}
+a{color:var(--sage);text-decoration:none}
+a:hover{text-decoration:underline}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;background:rgba(237,242,237,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--card-border)}
+.nav-logo{font-family:var(--font-display);font-size:1.1rem;color:var(--text)}
+.nav-back{font-size:0.875rem;color:var(--text-dim);display:flex;align-items:center;gap:0.5rem;transition:color 0.2s}
+.nav-back:hover{color:var(--text);text-decoration:none}
+
+.container{max-width:960px;margin:0 auto;padding:0 2rem}
+
+/* HERO */
+.case-hero{padding:8rem 0 4rem;background:linear-gradient(150deg,#EDF2ED 55%,#D8E8D4 100%)}
+.back-link{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text-dim);margin-bottom:2rem;transition:color 0.2s}
+.back-link:hover{color:var(--text);text-decoration:none}
+.case-tag{display:inline-block;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage);border:1px solid var(--sage-border);padding:0.3rem 0.75rem;border-radius:100px;margin-bottom:1.5rem}
+.case-title{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;letter-spacing:-0.02em;color:var(--text);margin-bottom:1rem}
+.case-subtitle{font-size:1.05rem;color:var(--text-dim);max-width:580px;line-height:1.8;margin-bottom:2.5rem}
+
+/* META ROW */
+.meta-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:2rem 0;border-top:1px solid var(--card-border);border-bottom:1px solid var(--card-border);margin-bottom:4rem}
+.meta-label{font-size:0.68rem;font-weight:600;color:var(--sage);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem}
+.meta-value{font-size:0.9rem;color:var(--text-dim);line-height:1.5}
+
+/* METRICS */
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:2rem 0 3rem}
+.metric-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1.5rem}
+.metric-value{font-family:var(--font-display);font-size:2rem;color:var(--sage);line-height:1;margin-bottom:0.4rem}
+.metric-label{font-size:0.75rem;color:var(--text-dim);line-height:1.5}
+
+/* CONTENT */
+.case-section{margin-bottom:4rem}
+.section-label{font-size:0.68rem;font-weight:600;color:var(--sage);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem}
+.section-heading{font-family:var(--font-display);font-size:clamp(1.4rem,3vw,1.85rem);color:var(--text);margin-bottom:1.25rem;letter-spacing:-0.01em}
+.case-text{color:var(--text-dim);font-size:0.95rem;line-height:1.85;margin-bottom:1rem}
+.case-text strong{color:var(--text)}
+
+/* PHASES */
+.phases{display:flex;flex-direction:column;gap:0.75rem;margin:1.5rem 0}
+.phase{display:flex;gap:1.25rem;padding:1.25rem;background:var(--card);border:1px solid var(--card-border);border-radius:10px;align-items:flex-start}
+.phase-num{font-family:var(--font-display);font-size:1.1rem;color:var(--sage);min-width:32px;line-height:1}
+.phase-title{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:0.25rem}
+.phase-desc{font-size:0.82rem;color:var(--text-dim);line-height:1.6}
+
+/* CHALLENGE-SOLUTION */
+.cs-grid{display:flex;flex-direction:column;gap:1rem;margin:1.5rem 0}
+.cs-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.cs-side-label{font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem}
+.cs-challenge .cs-side-label{color:#8B5E3C}
+.cs-solution .cs-side-label{color:var(--sage)}
+.cs-text{font-size:0.875rem;color:var(--text-dim);line-height:1.7}
+
+/* KEY LEARNINGS */
+.learnings{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.learning-item{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1.25rem}
+.learning-item p{font-size:0.875rem;color:var(--text-dim);line-height:1.7}
+
+/* TECH STACK */
+.tech-stack{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.75rem;margin:1.5rem 0}
+.tech-group{margin-bottom:1.25rem}
+.tech-group:last-child{margin-bottom:0}
+.tech-group-label{font-size:0.68rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.65rem}
+.tech-tags{display:flex;flex-wrap:wrap;gap:0.5rem}
+.tech-tag{font-size:0.8rem;font-weight:500;background:var(--sage-bg);color:var(--sage);border:1px solid var(--sage-border);padding:0.3rem 0.75rem;border-radius:100px}
+
+/* BUTTONS */
+.btn-primary{display:inline-block;padding:0.7rem 1.75rem;background:var(--sage);color:#fff;font-weight:600;font-size:0.875rem;border-radius:100px;transition:background 0.2s}
+.btn-primary:hover{background:#2E5438;text-decoration:none}
+.btn-ghost{display:inline-block;padding:0.7rem 1.75rem;border:1.5px solid var(--sage-border);color:var(--sage);font-weight:500;font-size:0.875rem;border-radius:100px;transition:all 0.2s}
+.btn-ghost:hover{background:var(--sage-bg);text-decoration:none}
+
+.cta-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--card-border)}
+
+footer{text-align:center;padding:2rem;border-top:1px solid var(--card-border);color:var(--text-dim);font-size:0.8rem;margin-top:4rem}
+
+@media(max-width:640px){
+  nav{padding:1rem 1.25rem}
+  .meta-row{grid-template-columns:1fr 1fr}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .cs-card{grid-template-columns:1fr}
+  .learnings{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Nurul Ilahi.</div>
+  <a href="index.html" class="nav-back">← Back to portfolio</a>
+</nav>
+
+<div class="case-hero">
+  <div class="container">
+    <a href="index.html" class="back-link">← Back to projects</a>
+    <div><span class="case-tag">Customer Analytics · Machine Learning · Segmentation</span></div>
+    <h1 class="case-title">Bank Customer Churn<br>— Segmentation & Prediction</h1>
+    <p class="case-subtitle">A two-part analysis: segmenting 10,000 bank customers into behavioral clusters to surface hidden retention risk, then building a churn prediction model — after catching a near-perfect feature that would have made the results meaningless.</p>
+    <div class="meta-row">
+      <div>
+        <div class="meta-label">Type</div>
+        <div class="meta-value">Personal Portfolio Project</div>
+      </div>
+      <div>
+        <div class="meta-label">Role</div>
+        <div class="meta-value">End-to-end — segmentation, leakage audit, modeling</div>
+      </div>
+      <div>
+        <div class="meta-label">Stack</div>
+        <div class="meta-value">Python · scikit-learn · KMeans · Logistic Regression</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="padding-bottom:4rem">
+
+  <div class="case-section">
+    <p class="section-label">Key results</p>
+    <div class="metrics-grid">
+      <div class="metric-card"><div class="metric-value">0.7799</div><div class="metric-label">AUC — churn prediction model</div></div>
+      <div class="metric-card"><div class="metric-value">0.4399</div><div class="metric-label">KS Statistic</div></div>
+      <div class="metric-card"><div class="metric-value">4</div><div class="metric-label">Customer segments (KMeans)</div></div>
+      <div class="metric-card"><div class="metric-value">0.9957</div><div class="metric-label">Correlation flagged as data leakage — excluded</div></div>
+      <div class="metric-card"><div class="metric-value">33%</div><div class="metric-label">Churn rate in highest-risk segment vs. 16% baseline</div></div>
+      <div class="metric-card"><div class="metric-value">10K</div><div class="metric-label">Customers analyzed</div></div>
+    </div>
+  </div>
+
+  <div class="case-section">
+    <p class="section-label">The problem</p>
+    <h2 class="section-heading">A 20% churn rate hides very different stories</h2>
+    <p class="case-text">A bank's customer base rarely churns uniformly. Treating all 10,000 customers as one homogeneous group — with an overall churn rate of <strong>20.4%</strong> — hides pockets of customers who are far more likely to leave, and others who are comfortably loyal.</p>
+    <p class="case-text">The goal was twofold: first, segment customers into behaviorally distinct groups to see where retention risk actually concentrates. Second, build a model to predict individual churn risk — while making sure that model reflects genuine behavioral signal, not information that only exists because a customer already decided to leave.</p>
+  </div>
+
+  <div class="case-section">
+    <p class="section-label">Approach</p>
+    <h2 class="section-heading">From raw data to a leakage-checked churn model</h2>
+    <div class="phases">
+      <div class="phase"><div class="phase-num">01</div><div><div class="phase-title">Data Cleaning & EDA</div><div class="phase-desc">Verified no missing values across 10,000 records; confirmed baseline churn rate of 20.4%.</div></div></div>
+      <div class="phase"><div class="phase-num">02</div><div><div class="phase-title">Feature Engineering for Clustering</div><div class="phase-desc">Prepared and scaled behavioral/demographic features for unsupervised segmentation.</div></div></div>
+      <div class="phase"><div class="phase-num">03</div><div><div class="phase-title">Optimal Cluster Selection</div><div class="phase-desc">Used the Elbow method (inertia) together with Silhouette score to validate the right number of segments — landed on <strong>k = 4</strong>.</div></div></div>
+      <div class="phase"><div class="phase-num">04</div><div><div class="phase-title">Cluster Profiling</div><div class="phase-desc">Profiled each segment by geography, balance, product count, and churn rate to find where risk concentrates.</div></div></div>
+      <div class="phase"><div class="phase-num">05</div><div><div class="phase-title">Leakage Audit</div><div class="phase-desc">Checked correlation of every feature against the churn target before modeling — caught one feature at 0.9957 correlation and excluded it.</div></div></div>
+      <div class="phase"><div class="phase-num">06</div><div><div class="phase-title">Churn Modeling — Logistic Regression</div><div class="phase-desc">Trained on the leakage-free feature set with standardized inputs and encoded categoricals (Geography, Gender, Card Type).</div></div></div>
+      <div class="phase"><div class="phase-num">07</div><div><div class="phase-title">Probability Calibration</div><div class="phase-desc">Applied CalibratedClassifierCV and validated with a reliability diagram comparing predicted vs. observed frequency before/after calibration.</div></div></div>
+    </div>
+  </div>
+
+  <div class="case-section">
+    <p class="section-label">Segmentation insight</p>
+    <h2 class="section-heading">The highest-balance segment churns the most</h2>
+    <p class="case-text">One cluster — almost entirely (99%) customers based in <strong>Germany</strong>, with an average balance roughly <strong>double</strong> that of the France/Spain-heavy clusters (~120K vs. ~62K) — churned at <strong>32.6%</strong>, nearly double the 16–16.5% churn rate seen in the other three clusters.</p>
+    <p class="case-text">This is the kind of pattern an aggregate 20.4% churn figure completely hides: the customers with the most money on deposit are also, in this dataset, the most likely to leave — exactly the segment where retention effort would have the highest financial payoff.</p>
+  </div>
+
+  <div class="case-section">
+    <p class="section-label">Challenges & solutions</p>
+    <h2 class="section-heading">What made this hard</h2>
+    <div class="cs-grid">
+      <div class="cs-card">
+        <div class="cs-challenge"><div class="cs-side-label">Challenge</div><p class="cs-text">A feature ("Complain") showed 0.9957 correlation with the churn target — a number too good to be true.</p></div>
+        <div class="cs-solution"><div class="cs-side-label">Solution</div><p class="cs-text">Cross-tabulated the feature against the target directly (2,034 of 2,044 complainers churned) — confirmed it was recorded at/after the churn decision, not a real predictive signal. Excluded it from training.</p></div>
+      </div>
+      <div class="cs-card">
+        <div class="cs-challenge"><div class="cs-side-label">Challenge</div><p class="cs-text">No ground-truth labels exist for "correct" customer segments — an arbitrary choice of k risks either oversimplifying or overfitting the segmentation.</p></div>
+        <div class="cs-solution"><div class="cs-side-label">Solution</div><p class="cs-text">Cross-checked the Elbow method against Silhouette score rather than relying on either alone, before settling on k = 4.</p></div>
+      </div>
+      <div class="cs-card">
+        <div class="cs-challenge"><div class="cs-side-label">Challenge</div><p class="cs-text">A high AUC doesn't guarantee the predicted probabilities themselves are trustworthy for business use (e.g. prioritizing retention spend).</p></div>
+        <div class="cs-solution"><div class="cs-side-label">Solution</div><p class="cs-text">Applied CalibratedClassifierCV and compared reliability diagrams pre/post calibration — confirming ranking (AUC 0.7799 → 0.7792) stayed stable while probability reliability was checked directly rather than assumed.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-section">
+    <p class="section-label">Key learnings</p>
+    <h2 class="section-heading">What this project taught me</h2>
+    <div class="learnings">
+      <div class="learning-item"><p>A feature with near-perfect correlation to the target is a red flag, not a gift — it usually means the feature is a consequence of the outcome (e.g. a complaint logged around cancellation), not a cause of it.</p></div>
+      <div class="learning-item"><p>Segmentation can surface concentrated risk that an aggregate churn rate hides entirely — the highest-balance cluster here churned at nearly 2x the rate of the rest.</p></div>
+      <div class="learning-item"><p>AUC and calibration measure different things — a model can rank customers correctly while still needing validation on whether its predicted probabilities are usable for decisions like pricing or targeting.</p></div>
+      <div class="learning-item"><p>Validating cluster count with two independent methods (Elbow + Silhouette) is a small step that meaningfully increases confidence in an otherwise unsupervised choice.</p></div>
+    </div>
+  </div>
+
+  <div class="case-section">
+    <p class="section-label">Tech stack</p>
+    <h2 class="section-heading">Tools used</h2>
+    <div class="tech-stack">
+      <div class="tech-group">
+        <div class="tech-group-label">Modeling</div>
+        <div class="tech-tags"><span class="tech-tag">Logistic Regression</span><span class="tech-tag">KMeans</span><span class="tech-tag">CalibratedClassifierCV</span><span class="tech-tag">scikit-learn</span></div>
+      </div>
+      <div class="tech-group">
+        <div class="tech-group-label">Evaluation</div>
+        <div class="tech-tags"><span class="tech-tag">ROC-AUC</span><span class="tech-tag">KS Statistic</span><span class="tech-tag">Silhouette Score</span><span class="tech-tag">Reliability Diagram</span></div>
+      </div>
+      <div class="tech-group">
+        <div class="tech-group-label">Data Processing</div>
+        <div class="tech-tags"><span class="tech-tag">Python</span><span class="tech-tag">Pandas</span><span class="tech-tag">NumPy</span><span class="tech-tag">StandardScaler</span></div>
+      </div>
+      <div class="tech-group">
+        <div class="tech-group-label">Visualization</div>
+        <div class="tech-tags"><span class="tech-tag">Matplotlib</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-row">
+    <a href="https://github.com/NurulIlahiHusnah/Bank_Customer_Churn_Prediction_and_Segmentation" target="_blank" class="btn-primary">View on GitHub →</a>
+    <a href="index.html" class="btn-ghost">← Back to portfolio</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Nurul Ilahi Husnah · Jakarta, 2026</p>
+</footer>
+
+</body>
+</html>
